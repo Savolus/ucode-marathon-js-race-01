@@ -2,6 +2,18 @@
 
     session_start();
 
+    function wait(string $login) {
+        $db = new mysqli('127.0.0.1', 'mdorohyi', 'securepass', 'marvel_champions', null);
+
+        $db->query("INSERT INTO waiters (login) VALUE ('$login');");
+
+        // $result = $db->query("SELECT COUNT(*) AS amount FROM waiters;");
+        // $result = $result->fetch_all()[0];
+        // echo $result["amount"];
+
+        $db->close();
+    }
+
     if (!isset($_SESSION["login"])) {
         echo '
             <script>
@@ -9,6 +21,8 @@
             </script>
         ';
     }
+
+    wait($_SESSION["login"]);
 
 ?>
 
