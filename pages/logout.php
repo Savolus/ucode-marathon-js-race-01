@@ -19,6 +19,6 @@ if (isset($_SESSION["login"])) {
 
 echo '
     <script>
-        window.location.href = "/pages/login.php" 
+        window.location.href = "/index.php"  
     </script>
 ';
