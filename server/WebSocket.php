@@ -6,7 +6,9 @@ class WebSocket {
     private $connection;                // server connection
 
     public $handler;                    // server handler
-    public $finders = [];               // array of user that finding room
+
+    public $users = [];                 // array of online users
+    public $finder = null;              // user that finding room
     public $lobbies = [];               // array of lobbies
 
     private $connects;                  // array of all connections
@@ -121,6 +123,30 @@ class WebSocket {
 
                 if (false === $decoded || 'close' === $decoded['type']) {
                     $this->debug('Connection closing');
+
+                    $user = array_search($connect, $this->users);
+
+                    if ($user !== false) {
+                        foreach ($this->lobbies as $key => $lobby) {
+                            $lobby_key = array_search($user, $lobby);
+
+                            if ($lobby_key !== false) {
+                                $responce_key = 0;
+
+                                if ($lobby_key === 0) {
+                                    $responce_key = 1;
+                                }
+
+                                $responce_user = $lobby[$responce_key];
+
+                                $responce = ["type" => "end"];
+
+                                WebSocket::response($this->users[$responce_user], json_encode($responce));
+                            }
+                        }
+
+                        unset($this->users[$user]);
+                    }
 
                     socket_write($connect, self::encode('  Closed on client demand', 'close'));
                     socket_shutdown($connect);

@@ -1,3 +1,4 @@
-import { logger } from './cookies.js'
+import { deleteCookie, logger } from './cookies.js'
 
+deleteCookie('enemy')
 logger()

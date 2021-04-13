@@ -9,80 +9,49 @@ $server = new WebSocket('127.0.0.1');
 
 $server->settings(true);
 
-$finders = [];
-$lobbies = [];
-
-/**
- * finders
- * [
- *      [
- *          "sock1",
- *          "user1"
- *      ],
- *      [
- *          "sock2",
- *          "user2"
- *      ]
- * ]
- */
-
-
-/**
- * lobies
- * [
- *      [
- *          [
- *              "sock1",
- *              "user1"
- *          ],
- *          [
- *              "sock2",
- *              "user2"
- *          ]
- *      ],
- *      [
- *          [
- *              "sock3",
- *              "user3"
- *          ],
- *          [
- *              "sock4",
- *              "user4"
- *          ]
- *      ]
- * ]
- */
-
-function start($server) {
-    $user_1 = array_shift($server->finders);
-    $user_2 = array_shift($server->finders);
-
-    $server->lobbies[] = [$user_1, $user_2];
-
-    $response_1 = [
-        "type" => "start",
-        "enemy" => $user_2[1]
-    ];
-
-    $response_2 = [
-        "type" => "start",
-        "enemy" => $user_1[1]
-    ];
-
-    WebSocket::response($user_1[0], json_encode($response_1));
-    WebSocket::response($user_2[0], json_encode($response_2));
-}
-
-
- $server->handler = function($connect, $data, $server) {
+$server->handler = function($connect, $data, $server) {
     $json = json_decode($data, true);
 
     switch ($json['type']) {
+        case 'login':
+            if (!in_array($json['user'], $server->users)) {
+                $server->users[$json['user']] = $connect;
+            }
+            break;
         case 'find':
-            $server->finders[] = [$connect, $json['user']];
+            $user = $json['user'];
 
-            if (sizeof($server->finders) > 1) {
-                start();
+            if (isset($server->finder)) {
+                $user_1 = $server->finder;
+                $user_2 = $user;
+
+                if ($user_1 === $user_2) {
+                    return;
+                }
+
+                echo "NOW: $user_1 AND $user_2" . PHP_EOL;
+
+                $server->lobbies[] = [$user_1, $user_2];
+
+                echo "LOBBIES(I):" . PHP_EOL;
+                var_dump($server->lobbies);
+
+                $response_1 = [
+                    "type" => "start",
+                    "enemy" => $user_2
+                ];
+
+                $response_2 = [
+                    "type" => "start",
+                    "enemy" => $user_1
+                ];
+
+                WebSocket::response($server->users[$user_1], json_encode($response_1));
+                WebSocket::response($server->users[$user_2], json_encode($response_2));
+
+                $server->finder = null;
+            } else {
+                $server->finder = $user;
             }
 
             break;
