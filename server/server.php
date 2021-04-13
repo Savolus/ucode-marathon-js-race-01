@@ -5,7 +5,7 @@ ob_implicit_flush();
 
 require_once 'WebSocket.php';
 
-$server = new WebSocket('127.0.0.1');
+$server = new WebSocket();
 
 $server->settings(true);
 

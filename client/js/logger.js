@@ -1,4 +1,4 @@
 import { deleteCookie, logger } from './cookies.js'
 
-deleteCookie('enemy')
+// deleteCookie('enemy') // in onther file
 logger()
