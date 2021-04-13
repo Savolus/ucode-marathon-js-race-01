@@ -6,6 +6,8 @@ class WebSocket {
     private $connection;                // server connection
 
     public $handler;                    // server handler
+    public $finders = [];               // array of user that finding room
+    public $lobbies = [];               // array of lobbies
 
     private $connects;                  // array of all connections
 
@@ -21,7 +23,7 @@ class WebSocket {
         $this->ip = $ip;
         $this->port = $port;
 
-        $this->handler = function($connection, $data) {
+        $this->handler = function($connection, $data, $self) {
             $message = '[' . date('r') . '] Получено сообщение от клиента: ' . $data . PHP_EOL;
 
             if ($this->verbose) {
@@ -132,7 +134,7 @@ class WebSocket {
                 }
 
                 if (is_callable($this->handler)) {
-                    call_user_func($this->handler, $connect, $decoded['payload']);
+                    call_user_func($this->handler, $connect, $decoded['payload'], $this);
                 }
             }
 

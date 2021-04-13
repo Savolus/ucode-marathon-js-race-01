@@ -6,4 +6,12 @@ socket.onmessage = event => {
     console.log(event.data)
 }
 
-socket.send(getCookie('login'))
+socket.onopen = () => {
+    const data = 
+    socket.send(
+        JSON.stringify({
+            type: 'find',
+            user: getCookie('login')
+        })
+    )
+}
