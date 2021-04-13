@@ -2,27 +2,25 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Простой WebSocket клиент</title>
-    <link rel="stylesheet" href="style.css" type="text/css" >
-    <script src="index.js" type="text/javascript" defer></script>
+    <title>Marvel Champions</title>
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+    <link rel="stylesheet" href="css/home.css" type="text/css">
+    <script src="js/logger.js" type="module"></script>
+    <script src="js/controller.js" type="module"></script>
+    <!-- <script src="js/connection.js" type="text/javascript" defer></script> -->
 </head>
 <body>
-    <div>
-        <span>Сервер</span>
-        <input id="server" type="text" value="" >
-    </div>
-    <div>
-        <input id="connect" type="button" value="Установить соединение" >
-        <input id="disconnect" type="button" value="Разорвать соединение" >
-    </div>
-    <div>
-        <span>Сообщение</span>
-        <input id="message" type="text" value="" >
-        <input id="send-msg" type="button" value="Отправить сообщение" >
-    </div>
-    <div>
-        <span>Информация</span>
-        <div id="socket-info"></div>
+    <div class="container big">
+        <div class="logo-box">
+            <img src="/images/join-logo.png" class="logo">
+            <h1>Marvel Champions</h1>
+            <h2 class="login"></h2>
+        </div>
+        <div class="control-panel">
+            <input type="button" value="Play" class="controller span-two" data-play>
+            <input type="button" value="Collection" class="controller" disabled>
+            <input type="button" value="Log out" class="controller" data-log-out>
+        </div>
     </div>
 </body>
 </html>
