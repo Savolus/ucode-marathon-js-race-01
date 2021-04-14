@@ -21,7 +21,7 @@ class WebSocket {
     private $logFile = 'ws-log.txt';    // log file
     private $resource;                  // resource of log file
 
-    public function __construct($ip = '10.11.7.10', $port = 8080) {
+    public function __construct($ip = '127.0.0.1', $port = 8080) {
         $this->ip = $ip;
         $this->port = $port;
 
@@ -125,36 +125,39 @@ class WebSocket {
                     $this->debug('Connection closing');
 
                     // Clear lobby (need to add game status)
-                    // $user = array_search($connect, $this->users);
+                    $user = array_search($connect, $this->users);
 
-                    // var_dump($this->users);
-                    // var_dump($this->lobbies);
-
-                    // foreach ($this->lobbies as $key => $lobby) {
-                    //     $lobby_key = array_search($user, $lobby);
-
-                    //     $this->debug('now lobby with: ' . $lobby[0] . ' and ' . $lobby[1]);
-
-                    //     if ($lobby_key !== false) {
-                    //         $responce_key = 0;
-
-                    //         if ($lobby_key === 0) {
-                    //             $responce_key = 1;
-                    //         }
-
-                    //         $responce_user = $lobby[$responce_key];
-
-                    //         $responce = ["type" => "end"];
-
-                    //         WebSocket::response($this->users[$responce_user], json_encode($responce));
+                    foreach ($this->lobbies as $lobby_key => &$lobby) {
+                        $this->debug('Dead');
                         
-                    //         $this->debug('lobby destroed successfully');
-
-                    //         unset($this->lobbies[$key]);
-
-                    //         break;
-                    //     }
-                    // }
+                        var_dump($lobby);
+                        
+                        if (is_array($lobby[$lobby_key])) {
+                            $this->debug('analize lobby');
+                            
+                            foreach ($lobby as $user_key => &$users) {
+                                if (in_array($user, $users)) {
+                                    $responce_key = 0;
+        
+                                    if ($user_key === 0) {
+                                        $responce_key = 1;
+                                    }
+    
+                                    $responce_user = $lobby[$responce_key]["login"];
+        
+                                    $responce = ["type" => "end"];
+        
+                                    WebSocket::response($this->users[$responce_user], json_encode($responce));
+                                
+                                    $this->debug('lobby destroed successfully');
+        
+                                    unset($this->lobbies[$lobby_key]);
+        
+                                    break 2;
+                                }
+                            }
+                        }
+                    }
 
                     socket_write($connect, self::encode('  Closed on client demand', 'close'));
                     socket_shutdown($connect);

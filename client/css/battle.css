@@ -52,10 +52,12 @@
     box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.2);
     backdrop-filter: blur(15px);
     border-radius: 15px;
-    width: 100%;
+    --width: 100;
+    width: calc(var(--width) * 1%);
     align-self: flex-end;
     display: flex;
-    min-width: 100px;
+    min-width: 150px;
+    transition: width 1s linear;
 }
 
 .rope .timer,
@@ -86,7 +88,7 @@
 }
 
 .hero {
-    width: 100%;
+    width: fit-content;
     height: 100%;
     position: relative;
 }
