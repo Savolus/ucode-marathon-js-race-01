@@ -1,86 +1,234 @@
-.heroes {
-    height: 100px;
-    width: 100px;
-    border-radius: 50%;
-}
-.field {
-    height: 60px;
+.section {
+    /* background-color: rgba(255, 0, 0, 0.322); */
     width: 100%;
+    height: calc(47.5% - 10px);
 }
-.upper-hero {
-    flex-direction: column;
-    align-items: center;
+
+.section.enemy {
+
+}
+
+.section.self {
+
+}
+
+.info {
     background-color: rgba(255, 255, 255, 0.7);
     border-top: 1px solid rgba(255, 255, 255, 0.2);
     border-left: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.2);
     backdrop-filter: blur(15px);
-}
-.lower-hero {
-    flex-direction: column;
-    align-items: center;
-    background-color: rgba(255, 255, 255, 0.7);
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
-    border-left: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(15px);
-}
-.hero-1 {
-    text-align: center;
-    justify-content: center;
-}
-.hero-2 {
-    text-align: center;
-    justify-content: center;
-}
-.mid {
-    background-color: rgba(255, 255, 255, 0.7);
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
-    border-left: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(15px);
-}
-.next-turn {
-    background-color: rgba(255, 255, 255, 0.7);
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
-    border-left: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(15px);
-}
-.next-turn-form {
-    justify-content: center;
-    text-align: center;
-    color: black;
-}
-.stones {
-    height: 50px;
-}
-.stones-div {
-    justify-content: right;
-    text-align: right;
-    margin-right: 10px;
-}
-.cards-set-1 {
+    border-radius: 15px;
+    height: calc(45% - 10px);
+    position: relative;
     display: flex;
-    margin-left: 20px;
+    justify-content: center;
+    align-items: center;
+    margin: 5px 0;
 }
-.deck {
+
+.info.enemy {
+}
+
+.info.self {
+}
+
+.board {
+    height: 55%;
+    justify-content: space-evenly;    
+    background-color: rgba(255, 255, 255, 0.7);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(15px);
+    border-radius: 15px;
+}
+
+.rope {
+    height: 5%;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(15px);
+    border-radius: 15px;
+    width: 100%;
+    align-self: flex-end;
     display: flex;
-    justify-content: right;
-    text-align: right;
+    min-width: 100px;
 }
-.deck-img {
-    height: 200px;
-    margin-right: 20px;
-    margin-bottom: 20px;
-    margin-left: 250px;
+
+.rope .timer,
+.rope .end-turn {
+    font-weight: bold;
+    font-size: 18px;
+    margin: 5px;
+    height: calc(100% - 10px);
+    width: fit-content;
+    padding: 5px 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-.card-2, .card-3, .card-4 {
-    margin-left: 80px;
+
+.rope .timer {
+    font-size: 24px;
 }
+
+.rope .end-turn {
+    background-color: rgba(255, 255, 255, 0.7);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(15px);
+    border-radius: 15px;
+    margin-left: auto;
+}
+
+.hero {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.hero-portrait {
+    border-radius: 40% 40% 25% 25%;
+    box-shadow: 0 0 5px 2.5px grey;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 180px;
+    height: 180px;
+    transform: translate(-50%, -50%);
+}
+
+.drop {
+    box-shadow: 0 0 5px 2.5px grey;
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    bottom: -10px;
+    transform: rotate(45deg);
+    border-radius: 0 50% 50% 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    z-index: 10;
+}
+
+.drop.hp {
+    background-color: red;
+    right: -10px;
+}
+
+.drop.at {
+    background-color: #ffb700;
+    left: -10px;
+}
+
+.drop.hero-health {
+    left: calc(50% + 65px);
+    bottom: 5%;
+}
+
+.health,
 .attack {
-    float: right;
+    transform: rotate(-45deg);
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
 }
-.timer {
-    float: right;
+
+.stones,
+.hand {
+    position: absolute;
+    display: grid;
+    grid-template-rows: repeat(1, 60px);
+    grid-template-columns: repeat(6, 60px);
+    background-color: rgba(255, 255, 255, 0.7);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(15px);
+    border-radius: 15px;
+}
+
+.stones {
+    right: 10px;
+}
+
+.hand {
+    left: 10px;
+    grid-template-rows: repeat(1, 110px);
+    grid-template-columns: repeat(6, 80px);
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+}
+
+.hand.enemy {
+    top: 10px;
+}
+
+.hand.self {
+    bottom: 10px;
+}
+
+.hand img {
+    width: calc(100% - 5px);
+    border-radius: 5px;
+}
+
+.hand.self .self-card-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 20;
+}
+
+.hand.self .self-card-box .card-info {
+    display: flex;
+    justify-content: space-evenly;
+    background-color: #333;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    width: 100%;
+    margin: 5px 0;
+    border-radius: 5px;
+}
+
+
+.stones.enemy {
+    top: 10px;
+}
+
+.stones.self {
+    bottom: 10px;
+}
+
+.stone {
+    width: 60px;
+    height: 60px;
+}
+
+.cards {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.card {
+    position: relative;
+    margin: 0 15px;
+}
+
+.card img {
+    border-radius: 35%;
+    width: 150px;
+    height: 150px;
+    box-shadow: 0 0 5px 2.5px grey;
 }
