@@ -142,6 +142,10 @@ class WebSocket {
                                 $responce = ["type" => "end"];
 
                                 WebSocket::response($this->users[$responce_user], json_encode($responce));
+                            
+                                unset($this->lobbies[$key]);
+
+                                break;
                             }
                         }
 
