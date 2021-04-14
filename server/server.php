@@ -12,15 +12,21 @@ $server->settings(true);
 $server->handler = function($connect, $data, $server) {
     $json = json_decode($data, true);
 
-    echo "JSON:" . PHP_EOL;
-    print_r($json);
-
     switch ($json['type']) {
         case 'login':
+            $response = [
+                "type" => "logged",
+                "status" => true
+            ];
+
             if (!in_array($json['user'], $server->users)) {
                 $server->users[$json['user']] = $connect;
+            } else {
+                $response["status"] = false;
             }
-            // if login exists send error response
+
+            WebSocket::response($connect, json_encode($response));
+
             break;
         case 'find':
             $user = $json['user'];
@@ -55,12 +61,6 @@ $server->handler = function($connect, $data, $server) {
 
             break;
     }
-
-    echo "USERS(A):" . PHP_EOL;
-    var_dump($server->users);
-
-    echo "LOBBIES(A):" . PHP_EOL;
-    var_dump($server->lobbies);
 };
 
 $server->startServer();

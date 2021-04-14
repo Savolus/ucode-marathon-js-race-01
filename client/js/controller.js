@@ -1,6 +1,8 @@
 import { getCookie, deleteCookie, logger } from './cookies.js'
 
-const socket = new WebSocket('ws://127.0.0.1:8080');
+const socket = new WebSocket('ws://10.11.7.10:8080');
+
+deleteCookie("enemy")
 
 const login = document.querySelector('.login')
 
@@ -19,8 +21,6 @@ logout.addEventListener('click', () => {
 })
 
 socket.onopen = () => {
-    deleteCookie("enemy")
-
     socket.send(
         JSON.stringify({
             type: 'login',

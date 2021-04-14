@@ -1,6 +1,6 @@
 import { setCookie, getCookie, deleteCookie } from './cookies.js'
 
-const socket = new WebSocket('ws://127.0.0.1:8080');
+const socket = new WebSocket('ws://10.11.7.10:8080');
 
 const title = document.querySelector('title')
 
@@ -14,11 +14,16 @@ p2.innerHTML = getCookie('login')
 
 socket.onmessage = event => {
     const data = JSON.parse(event.data)
+
+    console.log(data)
     
     switch (data.type) {
+        case 'logged':
+            // make him draw started hand
+            break
         case 'end':
-            location.replace('/')
             deleteCookie("enemy")
+            location.replace('/')
             break
     }
 }

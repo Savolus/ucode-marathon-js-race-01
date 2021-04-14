@@ -1,0 +1,86 @@
+.heroes {
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+}
+.field {
+    height: 60px;
+    width: 100%;
+}
+.upper-hero {
+    flex-direction: column;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(15px);
+}
+.lower-hero {
+    flex-direction: column;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(15px);
+}
+.hero-1 {
+    text-align: center;
+    justify-content: center;
+}
+.hero-2 {
+    text-align: center;
+    justify-content: center;
+}
+.mid {
+    background-color: rgba(255, 255, 255, 0.7);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(15px);
+}
+.next-turn {
+    background-color: rgba(255, 255, 255, 0.7);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(15px);
+}
+.next-turn-form {
+    justify-content: center;
+    text-align: center;
+    color: black;
+}
+.stones {
+    height: 50px;
+}
+.stones-div {
+    justify-content: right;
+    text-align: right;
+    margin-right: 10px;
+}
+.cards-set-1 {
+    display: flex;
+    margin-left: 20px;
+}
+.deck {
+    display: flex;
+    justify-content: right;
+    text-align: right;
+}
+.deck-img {
+    height: 200px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    margin-left: 250px;
+}
+.card-2, .card-3, .card-4 {
+    margin-left: 80px;
+}
+.attack {
+    float: right;
+}
+.timer {
+    float: right;
+}

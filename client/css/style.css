@@ -61,5 +61,5 @@ input[type="submit"] {
 
 .container.supper-huge {
     width: 90%;
-    aspect-ratio: 16 / 9;
+    height: 90%;
 }
