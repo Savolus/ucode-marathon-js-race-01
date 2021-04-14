@@ -1,31 +1,19 @@
-<?php
-
-    session_start();
-
-    if (!isset($_SESSION["login"])) {
-        echo '
-            <script>
-                window.location.href = "/pages/login.php" 
-            </script>
-        ';
-    }
-
-?>
-
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
-    <title>Home page</title>
-    <link rel="stylesheet" href="/css/home.css">
-    <script src="/js/home.js" defer></script>
+    <title>Marvel Champions</title>
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+    <link rel="stylesheet" href="css/home.css" type="text/css">
+    <script src="js/logger.js" type="module"></script>
+    <script src="js/controller.js" type="module" defer></script>
 </head>
 <body>
-    <div class="main-box">
+    <div class="container big">
         <div class="logo-box">
             <img src="/images/join-logo.png" class="logo">
             <h1>Marvel Champions</h1>
-            <h2><?php echo $_SESSION["login"] ?></h2>
+            <h2 class="login"></h2>
         </div>
         <div class="control-panel">
             <input type="button" value="Play" class="controller span-two" data-play>

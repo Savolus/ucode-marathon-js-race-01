@@ -17,13 +17,18 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-image: url('../images/centered-back.jpeg');
+    background-image: url('/images/centered-back.jpeg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
 }
 
-.waiting-room {
+input[type="button"],
+input[type="submit"] {
+    cursor: pointer;
+}
+
+.container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -33,13 +38,23 @@ body {
     border-left: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.2);
     backdrop-filter: blur(15px);
-    width: 300px;
-    height: 300px;
-    padding: 25px;
     border-radius: 15px;
 }
 
-.waiting-room * {
-    color: #0c1e39;
-    font-weight: bold;
+.container.small {
+    width: 300px;
+    height: 300px;
+    padding: 25px;
+}
+
+.container.normal {
+    width: 400px;
+    height: 400px;
+    padding: 25px;
+}
+
+.container.big {
+    width: 600px;
+    height: 600px;
+    padding: 50px;
 }
