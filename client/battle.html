@@ -10,56 +10,181 @@
 </head>
 <body>
     <div class="container supper-huge">
-        <div class="upper-hero">
-            <div class="hero-1">
-                <div class="stones-div">
-                    <img src="/images/stone.png" alt="stone-1" class="stones"><span>6<span>
+        <div class="section enemy">
+            <div class="info enemy">
+                <div class="hand enemy">
+                    <img src="/images/deck.png"class="deck-card">
+                    <img src="/images/deck.png"class="deck-card">
+                    <img src="/images/deck.png"class="deck-card">
+                    <img src="/images/deck.png"class="deck-card">
+                    <img src="/images/deck.png"class="deck-card">
+                    <img src="/images/deck.png"class="deck-card">
                 </div>
-                <span> HP: </span>
-                <br>
-                <span class="p1">Thanos</span>
-                <br>
-                <img src="/images/thanos.jpg" alt="hero-1" class="heroes">
+                <div class="hero enemy">
+                    <img src="/images/thanos.jpeg" class="hero-portrait enemy">
+                    <span class="hero-health drop hp">
+                        <span class="health self">
+                            20
+                        </span>
+                    </span>
+                </div>
+                <div class="stones enemy">
+                    <img src="/images/stone.png"class="stone">
+                    <img src="/images/stone.png"class="stone">
+                    <img src="/images/stone.png"class="stone">
+                    <img src="/images/stone.png"class="stone">
+                    <img src="/images/stone.png"class="stone">
+                    <img src="/images/stone.png"class="stone">
+                </div>
             </div>
-            <div class="mid"> 
-                <img src="/images/top.png" alt="field" class="field">
-                <div class="cards-set-1">
-                    <div class="card-1"><img src="../images/thanos.jpg" alt="hero-1"><br><span class="card-hp">HP:</span><span class="attack">Attack:</span></div>
-                    <div class="card-2"><img src="../images/thanos.jpg" alt="hero-1"><br><span class="card-hp">HP:</span><span class="attack">Attack:</span></div>
-                    <div class="card-3"><img src="../images/thanos.jpg" alt="hero-1"><br><span class="card-hp">HP:</span><span class="attack">Attack:</span></div>
-                    <div class="card-4"><img src="../images/thanos.jpg" alt="hero-1"><br><span class="card-hp">HP:</span><span class="attack">Attack:</span></div>
-                    <div class="deck"><img src="../images/deck.png" alt="hero-1" class="deck-img"></div>
+            <div class="board enemy"> 
+                <div class="cards enemy">
+                    <div class="card enemy">
+                        <img src="/images/thanos.jpeg">
+                        <span class="drop at">
+                            <span class="attack">2</span>
+                        </span>
+                        <span class="drop hp">
+                            <span class="health">4</span>
+                        </span>
+                    </div>
+                    <div class="card enemy">
+                        <img src="/images/thanos.jpeg">
+                        <span class="drop at">
+                            <span class="attack">2</span>
+                        </span>
+                        <span class="drop hp">
+                            <span class="health">3</span>
+                        </span>
+                    </div>
+                    <div class="card enemy">
+                        <img src="/images/thanos.jpeg">
+                        <span class="drop at">
+                            <span class="attack">2</span>
+                        </span>
+                        <span class="drop hp">
+                            <span class="health">2</span>
+                        </span>
+                    </div>
+                    <div class="card enemy">
+                        <img src="/images/thanos.jpeg">
+                        <<span class="drop at">
+                            <span class="attack">2</span>
+                        </span>
+                        <span class="drop hp">
+                            <span class="health">2</span>
+                        </span>
+                    </div>
                 </div>
-                
             </div>
         </div>
-        <div class="next-turn">
-            <form action="" class="next-turn-form">
-                <input type="text" value="1" style="display: none;">
-                <input type="submit" value="Next turn">
-                <span class="timer" ${formatTimeLeft()>Timer: </span>
-            </form>
+        <div class="rope">
+            <span class="timer">
+                30
+            </span>
+            <input type="button" value="End turn" class="end-turn">
         </div>
-        <div class="lower-hero">
-            <div class="mid"> 
-                <img src="/images/top.png" alt="field" class="field">
-                <div class="cards-set-1">
-                    <div class="card-1"><img src="../images/thanos.jpg" alt="hero-1"><br><span class="card-hp">HP:</span><span class="attack">Attack:</span></div>
-                    <div class="card-2"><img src="../images/thanos.jpg" alt="hero-1"><br><span class="card-hp">HP:</span><span class="attack">Attack:</span></div>
-                    <div class="card-3"><img src="../images/thanos.jpg" alt="hero-1"><br><span class="card-hp">HP:</span><span class="attack">Attack:</span></div>
-                    <div class="card-4"><img src="../images/thanos.jpg" alt="hero-1"><br><span class="card-hp">HP:</span><span class="attack">Attack:</span></div>
-                    <div class="deck"><img src="../images/deck.png" alt="hero-1" class="deck-img"></div>
+        <div class="section self">
+            <div class="board self"> 
+                <div class="cards self">
+                    <div class="card self">
+                        <img src="/images/thanos.jpeg">
+                        <span class="drop at">
+                            <span class="attack">2</span>
+                        </span>
+                        <span class="drop hp">
+                            <span class="health">4</span>
+                        </span>
+                    </div>
+                    <div class="card self">
+                        <img src="/images/thanos.jpeg">
+                        <span class="drop at">
+                            <span class="attack">2</span>
+                        </span>
+                        <span class="drop hp">
+                            <span class="health">3</span>
+                        </span>
+                    </div>
+                    <div class="card self">
+                        <img src="/images/thanos.jpeg">
+                        <span class="drop at">
+                            <span class="attack">2</span>
+                        </span>
+                        <span class="drop hp">
+                            <span class="health">2</span>
+                        </span>
+                    </div>
+                    <div class="card self">
+                        <img src="/images/thanos.jpeg">
+                        <span class="drop at">
+                            <span class="attack">2</span>
+                        </span>
+                        <span class="drop hp">
+                            <span class="health">2</span>
+                        </span>
+                    </div>
                 </div>
             </div>
-            <div class="hero-2">
-                <img src="/images/tony.jpg" alt="hero-2" class="heroes">
-                <br>
-                <span class="p2">Tony</span>
-                <br>
-                <span> HP: </span>
-                <br>
-                <div class="stones-div">
-                    <img src="/images/stone.png" alt="stone-2" class="stones"><span>6<span>
+            <div class="info self">
+                <div class="hand self">
+                    <div class="self-card-box">
+                        <img src="/images/thanos.jpeg"class="self-card">
+                        <span class="card-info">
+                            <span class="at">1</span>
+                            <span class="hp">2</span>
+                        </span>
+                    </div>
+                    <div class="self-card-box">
+                        <img src="/images/thanos.jpeg"class="self-card">
+                        <span class="card-info">
+                            <span class="at">1</span>
+                            <span class="hp">2</span>
+                        </span>
+                    </div>
+                    <div class="self-card-box">
+                        <img src="/images/thanos.jpeg"class="self-card">
+                        <span class="card-info">
+                            <span class="at">1</span>
+                            <span class="hp">2</span>
+                        </span>
+                    </div>
+                    <div class="self-card-box">
+                        <img src="/images/thanos.jpeg"class="self-card">
+                        <span class="card-info">
+                            <span class="at">1</span>
+                            <span class="hp">2</span>
+                        </span>
+                    </div>
+                    <div class="self-card-box">
+                        <img src="/images/thanos.jpeg"class="self-card">
+                        <span class="card-info">
+                            <span class="at">1</span>
+                            <span class="hp">2</span>
+                        </span>
+                    </div>
+                    <div class="self-card-box">
+                        <img src="/images/thanos.jpeg"class="self-card">
+                        <span class="card-info">
+                            <span class="at">1</span>
+                            <span class="hp">2</span>
+                        </span>
+                    </div>
+                </div>
+                <div class="hero self">
+                    <img src="/images/thanos.jpeg" class="hero-portrait self">
+                    <span class="hero-health drop hp">
+                        <span class="health self">
+                            20
+                        </span>
+                    </span>
+                </div>
+                <div class="stones self">
+                    <img src="/images/stone.png"class="stone">
+                    <img src="/images/stone.png"class="stone">
+                    <img src="/images/stone.png"class="stone">
+                    <img src="/images/stone.png"class="stone">
+                    <img src="/images/stone.png"class="stone">
+                    <img src="/images/stone.png"class="stone">
                 </div>
             </div>
         </div>
