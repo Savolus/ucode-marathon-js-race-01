@@ -16,6 +16,8 @@ socket.onmessage = event => {
 }
 
 socket.onopen = () => {
+    deleteCookie("enemy")
+
     socket.send(
         JSON.stringify({
             type: 'login',

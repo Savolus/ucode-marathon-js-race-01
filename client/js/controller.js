@@ -19,6 +19,8 @@ logout.addEventListener('click', () => {
 })
 
 socket.onopen = () => {
+    deleteCookie("enemy")
+
     socket.send(
         JSON.stringify({
             type: 'login',

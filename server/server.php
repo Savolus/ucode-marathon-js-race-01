@@ -12,11 +12,15 @@ $server->settings(true);
 $server->handler = function($connect, $data, $server) {
     $json = json_decode($data, true);
 
+    echo "JSON:" . PHP_EOL;
+    print_r($json);
+
     switch ($json['type']) {
         case 'login':
             if (!in_array($json['user'], $server->users)) {
                 $server->users[$json['user']] = $connect;
             }
+            // if login exists send error response
             break;
         case 'find':
             $user = $json['user'];
@@ -29,12 +33,7 @@ $server->handler = function($connect, $data, $server) {
                     return;
                 }
 
-                echo "NOW: $user_1 AND $user_2" . PHP_EOL;
-
                 $server->lobbies[] = [$user_1, $user_2];
-
-                echo "LOBBIES(I):" . PHP_EOL;
-                var_dump($server->lobbies);
 
                 $response_1 = [
                     "type" => "start",
@@ -56,6 +55,12 @@ $server->handler = function($connect, $data, $server) {
 
             break;
     }
+
+    echo "USERS(A):" . PHP_EOL;
+    var_dump($server->users);
+
+    echo "LOBBIES(A):" . PHP_EOL;
+    var_dump($server->lobbies);
 };
 
 $server->startServer();

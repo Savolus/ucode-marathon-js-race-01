@@ -58,3 +58,8 @@ input[type="submit"] {
     height: 600px;
     padding: 50px;
 }
+
+.container.supper-huge {
+    width: 90%;
+    aspect-ratio: 16 / 9;
+}
