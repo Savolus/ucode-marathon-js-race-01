@@ -64,6 +64,10 @@ class WebSocket {
         }
     }
     public static function response($connect, $data) {
+        if (!$connect) {
+            return;
+        }
+
         socket_set_nonblock($connect);
         socket_write($connect, self::encode($data));
     }
@@ -133,26 +137,31 @@ class WebSocket {
                     }
 
                     foreach ($this->lobbies as $lobby_key => &$lobby) {
-                        if (is_array($lobby[$lobby_key])) {
-                            foreach ($lobby as $user_key => &$users) {
-                                if (in_array($user, $users)) {
-                                    $responce_key = 0;
+                        if (isset($lobby)){
+                            if (is_array($lobby[$lobby_key])) {
+                                foreach ($lobby as $user_key => &$users) {
+                                    if (in_array($user, $users)) {
+                                        $responce_key = 0;
+            
+                                        if ($user_key === 0) {
+                                            $responce_key = 1;
+                                        }
         
-                                    if ($user_key === 0) {
-                                        $responce_key = 1;
+                                        $responce_user = $lobby[$responce_key]["login"];
+            
+                                        $responce = [
+                                            "type" => "end",
+                                            "status" => "win"
+                                        ];
+            
+                                        WebSocket::response($this->users[$responce_user], json_encode($responce));
+                                    
+                                        $this->debug('lobby destroed successfully');
+            
+                                        unset($this->lobbies[$lobby_key]);
+            
+                                        break 2;
                                     }
-    
-                                    $responce_user = $lobby[$responce_key]["login"];
-        
-                                    $responce = ["type" => "end"];
-        
-                                    WebSocket::response($this->users[$responce_user], json_encode($responce));
-                                
-                                    $this->debug('lobby destroed successfully');
-        
-                                    unset($this->lobbies[$lobby_key]);
-        
-                                    break 2;
                                 }
                             }
                         }

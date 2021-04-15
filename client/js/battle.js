@@ -23,6 +23,12 @@ const selfHand = document.querySelector('.hand.self')
 const selfStonesElement = document.querySelector('.stones.self')
 const enemyStonesElement = document.querySelector('.stones.enemy')
 
+const enemyHero = document.querySelector('.hero.enemy')
+const selfHero = document.querySelector('.hero.self')
+
+let enemyHP = 20
+let selfHP = 20
+
 let enemyHandSize = 4
 let enemyBoardArray = []
 let selfBoardArray = []
@@ -76,6 +82,41 @@ endTrunButton.addEventListener('click', () => {
     socket.send(
         JSON.stringify({
             type: 'end_turn'
+        })
+    )
+})
+
+const showResults = (winner, status) => {
+    const messageBox = document.querySelector('.message-box')
+    messageBox.querySelector('.container.small').innerHTML =
+    `${winner} ${status}!
+    <input type="button" class="controller" value="Home" onclick="location.replace('/')">
+    `
+
+    messageBox.style.display = 'flex'
+
+    clearInterval(ropeTimer)
+}
+
+enemyHero.addEventListener('click', () => {
+    if (!is_turn || !activeCard) {
+        return
+    }
+
+    const damage = +activeCard.querySelector('.at').innerText
+
+    enemyHP -= damage
+
+    if (enemyHP <= 0) {
+        return showResults(getCookie('login'), "win")
+    }
+
+    render('enemy_hero')
+
+    socket.send(
+        JSON.stringify({
+            type: 'attack_face',
+            damage
         })
     )
 })
@@ -283,6 +324,26 @@ const render = state => {
             })
 
             break
+        case 'enemy_hero':
+            enemyHero.innerHTML = 
+            `<img src="/images/cards/thanos.jpg" class="hero-portrait enemy">
+            <span class="hero-health drop hp">
+                <span class="health self">
+                    ${enemyHP}
+                </span>
+            </span>`
+
+            break
+        case 'self_hero':
+            selfHero.innerHTML =
+            `<img src="/images/cards/thanos.jpg" class="hero-portrait self">
+            <span class="hero-health drop hp">
+                <span class="health self">
+                    ${selfHP}
+                </span>
+            </span>`
+
+            break
     }
 }
 
@@ -360,6 +421,10 @@ socket.onmessage = event => {
             currentEnemyStones = data.stones
             enemyBoardArray.push(data.card)
 
+            if (enemyHandSize > 0) {
+                enemyHandSize--
+            }
+
             render('self_stones')
             render('self_board')
             render('enemy_stones')
@@ -376,9 +441,26 @@ socket.onmessage = event => {
             render('enemy_board')
 
             break
+        case 'attack_face':
+            selfHP -= data.damage
+
+            if (selfHP <= 0) {
+                return showResults(getCookie('enemy'), 'win')
+            }
+
+            render('self_hero')
+
+            break
         case 'end':
-            deleteCookie("enemy")
-            location.replace('/')
+            const status = data.status
+            let winner = getCookie("login")
+
+            if (status !== "win") {
+                winner = getCookie("enemy")
+            }
+
+            showResults(winner, status)
+
             break
     }
 }

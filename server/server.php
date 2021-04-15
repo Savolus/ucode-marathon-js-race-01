@@ -279,7 +279,37 @@ $server->handler = function($connect, $data, $server) {
                 }
             }
             break;
+        case 'attack_face':
+            $selfUser = array_search($connect, $server->users);
 
+            foreach ($server->lobbies as &$lobby) {
+                foreach ($lobby as $key => &$users) {
+                    $find_lobby = array_search($selfUser, $users);
+
+                    if ($find_lobby !== false) {
+                        $selfKey = $key;
+                        $enemyKey = 0;
+
+                        if ($key === 0) {
+                            $enemyKey = 1;
+                        }
+
+                        $damage = $json["damage"];
+
+                        $enemyUser = $lobby[$enemyKey]["login"];
+
+                        $response = [
+                            "type" => "attack_face",
+                            "damage" => $damage
+                        ];
+
+                        WebSocket::response($server->users[$enemyUser], json_encode($response));
+                    
+                        break 2;
+                    }
+                }
+            }
+            break;
     }
 };
 
