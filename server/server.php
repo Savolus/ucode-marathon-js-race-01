@@ -192,6 +192,8 @@ $server->handler = function($connect, $data, $server) {
 
                         WebSocket::response($server->users[$enemyUser], json_encode($response_1));
                         WebSocket::response($server->users[$selfUser], json_encode($response_2));
+                    
+                        break 2;
                     }
                 }
             }
