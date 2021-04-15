@@ -1,6 +1,6 @@
 import { setCookie, getCookie, deleteCookie } from './cookies.js'
 
-const socket = new WebSocket('ws://127.0.0.1:8080');
+const socket = new WebSocket('ws://10.11.7.10:8080');
 
 deleteCookie("enemy")
 

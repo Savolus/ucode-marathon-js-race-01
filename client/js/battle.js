@@ -1,6 +1,6 @@
 import { setCookie, getCookie, deleteCookie } from './cookies.js'
 
-const socket = new WebSocket('ws://127.0.0.1:8080');
+const socket = new WebSocket('ws://10.11.7.10:8080');
 
 if (!getCookie('enemy')) {
     location.replace('/')
@@ -44,6 +44,8 @@ let activeCard = null
 const rope = document.querySelector('.rope')
 const timer = document.querySelector('.timer')
 const endTrunButton = document.querySelector('.end-turn')
+
+const attacked = []
 
 const restartInterval = id => {
     if (!id) {
@@ -102,6 +104,16 @@ enemyHero.addEventListener('click', () => {
     if (!is_turn || !activeCard) {
         return
     }
+
+    const activeName = activeCard.dataset.self
+
+    if (attacked.includes(activeName)) {
+        return
+    }
+
+    attacked.push(activeName)
+
+    activeCard.classList.remove('active')
 
     const damage = +activeCard.querySelector('.at').innerText
 
@@ -244,6 +256,12 @@ const render = state => {
 
                     activeCard = element
 
+                    const name = activeCard.dataset.self
+
+                    if (attacked.includes(name)) {
+                        return
+                    }
+
                     if (activeCard) {
                         activeCard.classList.add('active')
                     }
@@ -280,6 +298,10 @@ const render = state => {
                     const enemyName = enemyCard.dataset.enemy
                     const activeName = activeCard.dataset.self
 
+                    if (attacked.includes(activeName)) {
+                        return
+                    }
+
                     const enemy_at = +enemyCard.querySelector('.at').innerText
                     const enemy_hp = +enemyCard.querySelector('.hp').innerText
 
@@ -314,6 +336,8 @@ const render = state => {
                             enemy_board: enemyBoardArray
                         })
                     )
+
+                    attacked.push(activeName)
 
                     activeCard.classList.remove('active')
                     activeCard = null
@@ -397,12 +421,14 @@ socket.onmessage = event => {
                     enemyStones++
                 }
     
-                if (enemyHandSize < 6) {
+                if (enemyHandSize < 6 && data.enemy_hand < 6) {
                     enemyHandSize = +data.enemy_hand
                 }
     
                 is_turn = false
             }
+
+            attacked.length = 0
 
             currentSelfStones = selfStones
             currentEnemyStones = enemyStones
@@ -474,4 +500,8 @@ socket.onopen = () => {
             user: getCookie('login')
         })
     )
+}
+
+socket.onclose = () => {
+    location.replace('/')
 }

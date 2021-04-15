@@ -141,6 +141,7 @@
     width: 180px;
     height: 180px;
     transform: translate(-50%, -50%);
+    cursor: pointer;
 }
 
 .drop {
@@ -227,6 +228,7 @@
     align-items: center;
     flex-direction: column;
     z-index: 20;
+    cursor: pointer;
 }
 
 .hand.self .self-card-box .card-info {
@@ -265,6 +267,7 @@
 .card {
     position: relative;
     margin: 0 15px;
+    cursor: pointer;
 }
 
 .card img {
@@ -291,7 +294,6 @@
     align-items: center;
     font-size: 24px;
     font-weight: bold;
-    z-index: 1000;
 }
 
 .container.small {
