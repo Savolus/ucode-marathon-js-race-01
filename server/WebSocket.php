@@ -64,6 +64,7 @@ class WebSocket {
         }
     }
     public static function response($connect, $data) {
+        socket_set_nonblock($connect);
         socket_write($connect, self::encode($data));
     }
     public function startServer() {
@@ -128,11 +129,7 @@ class WebSocket {
                     $user = array_search($connect, $this->users);
 
                     foreach ($this->lobbies as $lobby_key => &$lobby) {
-                        $this->debug('Dead');
-                        
                         if (is_array($lobby[$lobby_key])) {
-                            $this->debug('analize lobby');
-                            
                             foreach ($lobby as $user_key => &$users) {
                                 if (in_array($user, $users)) {
                                     $responce_key = 0;
@@ -163,7 +160,7 @@ class WebSocket {
 
                     unset($this->users[$user]);
 
-                    unset($this->connects[ array_search($connect, $this->connects) ]);
+                    unset($this->connects[array_search($connect, $this->connects)]);
 
                     $this->debug('Closed successfully');
 

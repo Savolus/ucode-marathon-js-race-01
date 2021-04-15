@@ -24,8 +24,8 @@ const selfStonesElement = document.querySelector('.stones.self')
 const enemyStonesElement = document.querySelector('.stones.enemy')
 
 let enemyHandSize = 4
-const enemyBoardArray = []
-const selfBoardArray = []
+let enemyBoardArray = []
+let selfBoardArray = []
 let selfHandArray = []
 let selfStones = 0, enemyStones = 0
 let currentSelfStones = selfStones
@@ -33,66 +33,45 @@ let currentEnemyStones = enemyStones
 
 let is_turn = false
 
+let activeCard = null
+
 const rope = document.querySelector('.rope')
 const timer = document.querySelector('.timer')
 const endTrunButton = document.querySelector('.end-turn')
 
-// const restartInterval = id => {
-//     if (!id) {
-//         return setInterval(() => {
-//             let time = +timer.innerHTML - 1
+const restartInterval = id => {
+    if (!id) {
+        return setInterval(() => {
+            let time = +timer.innerHTML - 1
         
-//             if (time === 0) {
-//                 return endTrunButton.click()
-//             }
-        
-//             const size = (time + 3) * 3 + 1
-        
-//             timer.innerHTML = time.toString()
-        
-//             rope.style.setProperty('--width', size.toString())
-//         }, 1000)
-//     }
+            if (time === 0) {
+                return endTrunButton.click()
+            }
 
-//     clearInterval(id)
-//     return restartInterval()
-// }
+            if (time < 16) {
+                const size = time * 7 - 5
+            
+                rope.style.setProperty('--width', size.toString())
+            }
 
-// let ropeTimer = setInterval(() => {
-//     let time = +timer.innerHTML - 1
+            timer.innerHTML = time.toString()
+        }, 1000)
+    }
 
-//     if (time === 0) {
-//         endTrunButton.click()
-//         return clearInterval(ropeTimer)
-//     }
+    clearInterval(id)
 
-//     const size = (time + 3) * 3 + 1
+    timer.innerHTML = (30).toString()
+    rope.style.setProperty('--width', (100).toString())
 
-//     timer.innerHTML = time.toString()
+    return restartInterval()
+}
 
-//     rope.style.setProperty('--width', size.toString())
-// }, 1000)
+let ropeTimer = 0
 
 endTrunButton.addEventListener('click', () => {
     if (!is_turn) {
         return
     }
-
-    // timer.innerHTML = (30).toString()
-    // ropeTimer = setInterval(() => {
-    //     let time = +timer.innerHTML - 1
-    
-    //     if (time === 0) {
-    //         endTrunButton.click()
-    //         return clearInterval(ropeTimer)
-    //     }
-    
-    //     const size = (time + 3) * 3 + 1
-    
-    //     timer.innerHTML = time.toString()
-    
-    //     rope.style.setProperty('--width', size.toString())
-    // }, 1000)
 
     socket.send(
         JSON.stringify({
@@ -192,14 +171,14 @@ const render = state => {
             }
 
             break
-        case 'enemy_board':
-            enemyBoard.innerHTML = ``
+        case 'self_board':
+            selfBoard.innerHTML = ``
 
-            console.log(enemyBoardArray)
+            selfBoardArray = selfBoardArray.filter(card => card[2] > 0)
 
-            enemyBoardArray.forEach(card => {
-                enemyBoard.innerHTML +=
-                `<div class="card enemy">
+            selfBoardArray.forEach(card => {
+                selfBoard.innerHTML +=
+                `<div class="card self" data-self="${card[0]}">
                     <img src="/images/cards/${card[0]}.jpg">
                     <span class="drop at">
                         <span class="attack">${card[1]}</span>
@@ -208,6 +187,99 @@ const render = state => {
                         <span class="health">${card[2]}</span>
                     </span>
                 </div>`
+            })
+
+            selfBoard.querySelectorAll('.card.self').forEach(card => {
+                card.addEventListener('click', event => {
+                    if (!is_turn) {
+                        return
+                    }
+
+                    const element = event.currentTarget
+
+                    if (activeCard) {
+                        activeCard.classList.remove('active')
+                    }
+
+                    activeCard = element
+
+                    if (activeCard) {
+                        activeCard.classList.add('active')
+                    }
+                })
+            })
+
+            break
+        case 'enemy_board':
+            enemyBoard.innerHTML = ``
+
+            enemyBoardArray = enemyBoardArray.filter(card => card[2] > 0)
+
+            enemyBoardArray.forEach(card => {
+                enemyBoard.innerHTML +=
+                `<div class="card enemy" data-enemy="${card[0]}">
+                    <img src="/images/cards/${card[0]}.jpg">
+                    <span class="drop at">
+                        <span class="attack">${card[1]}</span>
+                    </span>
+                    <span class="drop hp">
+                        <span class="health">${card[2]}</span>
+                    </span>
+                </div>`
+            })
+
+            enemyBoard.querySelectorAll('.card.enemy').forEach(card => {
+                card.addEventListener('click', event => {
+                    if (!activeCard || !is_turn) {
+                        return
+                    }
+
+                    const enemyCard = event.currentTarget
+
+                    const enemyName = enemyCard.dataset.enemy
+                    const activeName = activeCard.dataset.self
+
+                    const enemy_at = +enemyCard.querySelector('.at').innerText
+                    const enemy_hp = +enemyCard.querySelector('.hp').innerText
+
+                    const self_at = +activeCard.querySelector('.at').innerText
+                    const self_hp = +activeCard.querySelector('.hp').innerText
+
+                    const new_enemy_hp = enemy_hp - self_at
+                    const new_self_hp = self_hp - enemy_at
+
+                    let status = false
+
+                    selfBoardArray.forEach(card => {
+                        if (card[0] === activeName && !status) {
+                            card[2] = new_self_hp
+                            status = true
+                        }
+                    })
+
+                    status = false
+
+                    enemyBoardArray.forEach(card => {
+                        if (card[0] === enemyName && !status) {
+                            card[2] = new_enemy_hp
+                            status = true
+                        }
+                    })
+
+                    socket.send(
+                        JSON.stringify({
+                            type: 'attack',
+                            self_board: selfBoardArray,
+                            enemy_board: enemyBoardArray
+                        })
+                    )
+
+                    activeCard.classList.remove('active')
+                    activeCard = null
+
+                    render('self_board')
+                    render('enemy_board')
+                })
             })
 
             break
@@ -264,24 +336,42 @@ socket.onmessage = event => {
                     enemyStones++
                 }
     
-                enemyHandSize = +data.enemy_hand
+                if (enemyHandSize < 6) {
+                    enemyHandSize = +data.enemy_hand
+                }
     
                 is_turn = false
             }
 
             currentSelfStones = selfStones
             currentEnemyStones = enemyStones
+
+            ropeTimer = restartInterval(ropeTimer)
             
             render('self_hand')
             render('self_stones')
+            render('self_board')
             render('enemy_hand')
             render('enemy_stones')
+            render('enemy_board')
             
             break
         case 'play':
             currentEnemyStones = data.stones
             enemyBoardArray.push(data.card)
 
+            render('self_stones')
+            render('self_board')
+            render('enemy_stones')
+            render('enemy_board')
+
+            break
+        case 'attack':
+            selfBoardArray = data.self_board
+            enemyBoardArray = data.enemy_board
+
+            render('self_stones')
+            render('self_board')
             render('enemy_stones')
             render('enemy_board')
 
@@ -294,6 +384,8 @@ socket.onmessage = event => {
 }
 
 socket.onopen = () => {
+    ropeTimer = restartInterval()
+
     socket.send(
         JSON.stringify({
             type: 'login',

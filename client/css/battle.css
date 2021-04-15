@@ -91,11 +91,11 @@
     box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.2);
     backdrop-filter: blur(15px);
     border-radius: 15px;
-    --width: 100;
     width: calc(var(--width) * 1%);
     align-self: flex-end;
     display: flex;
-    min-width: 150px;
+    --width: 100;
+    min-width: 200px;
     transition: width 1s linear;
 }
 
@@ -272,4 +272,9 @@
     width: 150px;
     height: 150px;
     box-shadow: 0 0 5px 2.5px grey;
+}
+
+.active {
+    border: 5px solid royalblue;
+    border-radius: 65%;
 }
