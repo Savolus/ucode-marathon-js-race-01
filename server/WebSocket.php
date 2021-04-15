@@ -130,8 +130,6 @@ class WebSocket {
                     foreach ($this->lobbies as $lobby_key => &$lobby) {
                         $this->debug('Dead');
                         
-                        var_dump($lobby);
-                        
                         if (is_array($lobby[$lobby_key])) {
                             $this->debug('analize lobby');
                             

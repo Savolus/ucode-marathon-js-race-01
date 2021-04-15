@@ -2,63 +2,109 @@ import { setCookie, getCookie, deleteCookie } from './cookies.js'
 
 const socket = new WebSocket('ws://10.11.7.10:8080');
 
+if (!getCookie('enemy')) {
+    location.replace('/')
+}
+
 const title = document.querySelector('title')
 
 title.innerHTML += ` ${getCookie('enemy')} vs ${getCookie('login')}`
+
+const enemy = document.querySelector('.credentials.enemy .login')
+const self = document.querySelector('.credentials.self .login')
+
+enemy.innerHTML = getCookie('enemy')
+self.innerHTML = getCookie('login')
 
 const enemyBoard = document.querySelector('.cards.enemy')
 const selfBoard = document.querySelector('.cards.self')
 const enemyHand = document.querySelector('.hand.enemy')
 const selfHand = document.querySelector('.hand.self')
 const selfStonesElement = document.querySelector('.stones.self')
+const enemyStonesElement = document.querySelector('.stones.enemy')
 
 let enemyHandSize = 4
 const enemyBoardArray = []
 const selfBoardArray = []
-const selfHandArray = []
-let selfStones = 0
+let selfHandArray = []
+let selfStones = 0, enemyStones = 0
 let currentSelfStones = selfStones
+let currentEnemyStones = enemyStones
 
-let turn = []
+let is_turn = false
 
 const rope = document.querySelector('.rope')
 const timer = document.querySelector('.timer')
 const endTrunButton = document.querySelector('.end-turn')
 
-const restartInterval = id => {
-    if (!id) {
-        return setInterval(() => {
-            let time = +timer.innerHTML - 1
+// const restartInterval = id => {
+//     if (!id) {
+//         return setInterval(() => {
+//             let time = +timer.innerHTML - 1
         
-            if (time === 0) {
-                return endTrunButton.click()
-            }
+//             if (time === 0) {
+//                 return endTrunButton.click()
+//             }
         
-            const size = (time + 3) * 3 + 1
+//             const size = (time + 3) * 3 + 1
         
-            timer.innerHTML = time.toString()
+//             timer.innerHTML = time.toString()
         
-            rope.style.setProperty('--width', size.toString())
-        }, 1000)
-    }
+//             rope.style.setProperty('--width', size.toString())
+//         }, 1000)
+//     }
 
-    clearInterval(id)
-    return restartInterval()
-}
+//     clearInterval(id)
+//     return restartInterval()
+// }
 
-let ropeTimer = restartInterval()
+// let ropeTimer = setInterval(() => {
+//     let time = +timer.innerHTML - 1
+
+//     if (time === 0) {
+//         endTrunButton.click()
+//         return clearInterval(ropeTimer)
+//     }
+
+//     const size = (time + 3) * 3 + 1
+
+//     timer.innerHTML = time.toString()
+
+//     rope.style.setProperty('--width', size.toString())
+// }, 1000)
 
 endTrunButton.addEventListener('click', () => {
-    timer.innerHTML = (30).toString()
-    ropeTimer = restartInterval(ropeTimer)
+    if (!is_turn) {
+        return
+    }
 
-    // send to server that turn end
+    // timer.innerHTML = (30).toString()
+    // ropeTimer = setInterval(() => {
+    //     let time = +timer.innerHTML - 1
+    
+    //     if (time === 0) {
+    //         endTrunButton.click()
+    //         return clearInterval(ropeTimer)
+    //     }
+    
+    //     const size = (time + 3) * 3 + 1
+    
+    //     timer.innerHTML = time.toString()
+    
+    //     rope.style.setProperty('--width', size.toString())
+    // }, 1000)
+
+    socket.send(
+        JSON.stringify({
+            type: 'end_turn'
+        })
+    )
 })
 
 const render = state => {
     switch (state) {
         case 'self_hand':
-            selfHand.innerHTML = ''
+            selfHand.innerHTML = ``
 
             selfHandArray.forEach(card => {
                 selfHand.innerHTML +=
@@ -74,6 +120,10 @@ const render = state => {
 
             selfHand.querySelectorAll('.self-card-box').forEach(card => {
                 card.addEventListener('click', event => {
+                    if (!is_turn) {
+                        return
+                    }
+
                     const element = event.currentTarget
 
                     const pr = +element.querySelector('.pr').innerText
@@ -84,23 +134,36 @@ const render = state => {
                     
                     currentSelfStones -= pr
 
+                    const card = [
+                        element.getAttribute('data-card'),
+                        element.querySelector('.at').innerText,
+                        element.querySelector('.hp').innerText
+                    ]
+
                     selfBoard.innerHTML +=
                     `<div class="card self">
                         <img src="${element.querySelector('img').getAttribute('src')}">
                         <span class="drop at">
-                            <span class="attack">${element.querySelector('.at').innerText}</span>
+                            <span class="attack">${card[1]}</span>
                         </span>
                         <span class="drop hp">
-                            <span class="health">${element.querySelector('.hp').innerText}</span>
+                            <span class="health">${card[2]}</span>
                         </span>
                     </div>`
                 
                     selfHand.removeChild(element)
-                
-                    turn.push({
-                        card: element.getAttribute('data-card'),
-                        action: 'play'
-                    })
+                    console.log(selfHandArray)
+                    selfHandArray = selfHandArray.filter(handCard => handCard[0] !== card[0])
+                    console.log(selfHandArray)
+                    selfBoardArray.push(card)
+
+                    socket.send(
+                        JSON.stringify({
+                            type: 'play',
+                            stones: currentSelfStones,
+                            card 
+                        })
+                    )
                 
                     render('self_stones')
                 })
@@ -121,6 +184,33 @@ const render = state => {
             for (let i = 0; i < currentSelfStones; i++) {
                 selfStonesElement.innerHTML += `<img src="/images/stone.png"class="stone">`
             }
+
+            break
+        case 'enemy_stones':
+            enemyStonesElement.innerHTML = ``
+
+            for (let i = 0; i < currentEnemyStones; i++) {
+                enemyStonesElement.innerHTML += `<img src="/images/stone.png"class="stone">`
+            }
+
+            break
+        case 'enemy_board':
+            enemyBoard.innerHTML = ``
+
+            console.log(enemyBoardArray)
+
+            enemyBoardArray.forEach(card => {
+                enemyBoard.innerHTML +=
+                `<div class="card enemy">
+                    <img src="/images/cards/${card[0]}.jpg">
+                    <span class="drop at">
+                        <span class="attack">${card[1]}</span>
+                    </span>
+                    <span class="drop hp">
+                        <span class="health">${card[2]}</span>
+                    </span>
+                </div>`
+            })
 
             break
     }
@@ -144,12 +234,14 @@ socket.onmessage = event => {
                 selfHandArray.push(card)
             }
 
-            // add to this object to 
-
             render('self_hand')
             render('enemy_hand')
+            render('self_stones')
+            render('enemy_stones')
 
             if (data.coin) {
+                is_turn = data.coin
+
                 socket.send(
                     JSON.stringify({
                         type: 'draw'
@@ -159,19 +251,41 @@ socket.onmessage = event => {
 
             break
         case 'draw':
-            if (selfStones < 6) {
-                selfStones++
-                currentSelfStones = selfStones
+            if (data.self) {
+                if (selfStones < 6) {
+                    selfStones++
+                }
+
+                if (data.card) {
+                    selfHandArray.push(data.card)
+                }
+
+                is_turn = true
+            } else {
+                if (enemyStones < 6) {
+                    enemyStones++
+                }
+    
+                enemyHandSize = +data.enemy_hand
+    
+                is_turn = false
             }
 
-            turn = [
-                { card: null, action: 'draw' }
-            ]
-
-            selfHandArray.push(data.card)
-
+            currentSelfStones = selfStones
+            currentEnemyStones = enemyStones
+            
             render('self_hand')
             render('self_stones')
+            render('enemy_hand')
+            render('enemy_stones')
+            
+            break
+        case 'play':
+            currentEnemyStones = data.stones
+            enemyBoardArray.push(data.card)
+
+            render('enemy_stones')
+            render('enemy_board')
 
             break
         case 'end':

@@ -105,6 +105,8 @@ $server->handler = function($connect, $data, $server) {
                         "coin" => $turn_first
                     ];
 
+                    var_dump($user);
+
                     WebSocket::response($server->users[$user], json_encode($response));
 
                     break;
@@ -113,33 +115,133 @@ $server->handler = function($connect, $data, $server) {
 
             break;
         case 'draw':
-            $user = array_search($connect, $server->users);
+            $selfUser = array_search($connect, $server->users);
 
             foreach ($server->lobbies as &$lobby) {
                 foreach ($lobby as $key => &$users) {
-                    $find_lobby = array_search($user, $users);
+                    $find_lobby = array_search($selfUser, $users);
 
                     if ($find_lobby !== false) {
+                        $selfKey = $key;
+                        $enemyKey = 0;
+
+                        if ($key === 0) {
+                            $enemyKey = 1;
+                        }
+
+                        // for self
                         $deck = $users["deck"];
-
                         $card = array_shift($deck);
-
                         array_push($users["hand"], $card);
-
                         $users["deck"] = $deck;
 
-                        echo "Draw card";
-
-                        $response = [
+                        $response_1 = [
                             "type" => "draw",
+                            "self" => true,
                             "card" => $card
                         ];
 
-                        WebSocket::response($server->users[$user], json_encode($response));
+                        $response_2 = [
+                            "type" => "draw",
+                            "self" => false,
+                            "enemy_hand" => sizeof($users["hand"])
+                        ];
+
+                        $enemyUser = $lobby[$enemyKey]["login"];
+
+                        WebSocket::response($server->users[$selfUser], json_encode($response_1));
+                        WebSocket::response($server->users[$enemyUser], json_encode($response_2));
                     }
                 }
             }
             break;
+        case 'end_turn':
+            $selfUser = array_search($connect, $server->users);
+
+            foreach ($server->lobbies as &$lobby) {
+                foreach ($lobby as $key => &$users) {
+                    $find_lobby = array_search($selfUser, $users);
+
+                    if ($find_lobby !== false) {
+                        $selfKey = $key;
+                        $enemyKey = 0;
+
+                        if ($key === 0) {
+                            $enemyKey = 1;
+                        }
+
+                        // for self
+                        $deck = $users["deck"];
+                        $card = array_shift($deck);
+                        array_push($users["hand"], $card);
+                        $users["deck"] = $deck;
+
+                        $response_1 = [
+                            "type" => "draw",
+                            "self" => true,
+                            "card" => $card
+                        ];
+
+                        $response_2 = [
+                            "type" => "draw",
+                            "self" => false,
+                            "enemy_hand" => sizeof($users["hand"])
+                        ];
+
+                        $enemyUser = $lobby[$enemyKey]["login"];
+
+                        WebSocket::response($server->users[$enemyUser], json_encode($response_1));
+                        WebSocket::response($server->users[$selfUser], json_encode($response_2));
+                    }
+                }
+            }
+            break;
+        case 'play':
+            $selfUser = array_search($connect, $server->users);
+
+            echo "$selfUser PLAYED CARD" . PHP_EOL;
+
+            foreach ($server->lobbies as &$lobby) {
+                foreach ($lobby as $key => &$users) {
+                    $find_lobby = array_search($selfUser, $users);
+
+                    if ($find_lobby !== false) {
+                        $selfKey = $key;
+                        $enemyKey = 0;
+
+                        if ($key === 0) {
+                            $enemyKey = 1;
+                        }
+
+                        $playedStones = $json["stones"];
+                        $playedCard = $json["card"];
+
+                        foreach ($users["hand"] as $key => $card) {
+                            if ($card[0] === $playedCard[0]) {
+                                unset($users["hand"][$key]);
+
+                                break;
+                            }
+                        }
+
+                        $response = [
+                            "type" => "play",
+                            "stones" => $playedStones,
+                            "card" => $playedCard
+                        ];
+
+                        $enemyUser = $lobby[$enemyKey]["login"];
+
+                        echo "$enemyUser RECIVED PLAYED CARD" . PHP_EOL;
+
+                        WebSocket::response($server->users[$enemyUser], json_encode($response));
+                    
+                        break 2;
+                    }
+                }
+            }
+            break;
+
     }
 };
 
