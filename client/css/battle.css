@@ -273,7 +273,7 @@
 
 .active {
     box-shadow: 0 0 7.5px 5px royalblue;
-    border-radius: 50%;
+    border-radius: 35%;
 }
 
 .message-box {

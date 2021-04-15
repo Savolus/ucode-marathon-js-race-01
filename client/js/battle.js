@@ -1,4 +1,4 @@
-import { setCookie, getCookie, deleteCookie } from './cookies.js'
+import { getCookie } from './cookies.js'
 
 const socket = new WebSocket('ws://10.11.7.10:8080');
 
@@ -29,7 +29,7 @@ const selfHero = document.querySelector('.hero.self')
 let enemyHP = 20
 let selfHP = 20
 
-let enemyHandSize = 4
+let enemyHandSize = 3
 let enemyBoardArray = []
 let selfBoardArray = []
 let selfHandArray = []
