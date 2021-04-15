@@ -128,6 +128,10 @@ class WebSocket {
                     // Clear lobby (need to add game status)
                     $user = array_search($connect, $this->users);
 
+                    if ($this->finder === $user) {
+                        $this->finder = null;
+                    }
+
                     foreach ($this->lobbies as $lobby_key => &$lobby) {
                         if (is_array($lobby[$lobby_key])) {
                             foreach ($lobby as $user_key => &$users) {

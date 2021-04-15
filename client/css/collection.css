@@ -1,26 +1,19 @@
 h1 {
     text-align: center;
-    margin-bottom: 10px;
 }
-.collection-big {
-    width: 80%;
-    height: 100%;
-    background-color: rgba(255, 255, 255, 0.7);
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
-    border-left: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(15px);
-    border-radius: 15px;
-}
+
 .collection-grid {
     display: grid;
-    grid-template-columns: auto auto auto auto;
+    grid-template-columns: repeat(5, auto);
 }
+
 .grid-item {
     padding: 5px;
     font-size: 30px;
+    font-weight: bold;
     text-align: center;
 }
+
 .drop {
     box-shadow: 0 0 5px 2.5px grey;
     position: absolute;
@@ -37,18 +30,20 @@ h1 {
 
 .drop.hp {
     background-color: red;
-    right: 55px;
+    right: 0px;
 }
 
 .drop.at {
     background-color: #ffb700;
-    left: 55px;
+    left: 0px;
 }
+
 .drop.pr {
     background-color: rgb(49, 49, 182);
-    right: 55px;
-    bottom: 80px;
+    right: 0px;
+    top: 0px;
 }
+
 .cards {
     display: flex;
     justify-content: center;
@@ -67,43 +62,50 @@ h1 {
     height: 120px;
     box-shadow: 0 0 5px 2.5px grey;
 }
+
 .card:hover img{
     border-radius: 35%;
     width: 120px;
     height: 120px;
     box-shadow: 0 0 5px 2.5px purple;
 }
+
 .health, .attack, .price{
     transform: rotate(-45deg);
     color: white;
     font-weight: bold;
     font-size: 20px;
 }
+
 .drop.hp:hover {
     box-shadow: 0 0 5px 2.5px red;
 }
+
 .drop.at:hover {
     box-shadow: 0 0 5px 2.5px #ffb700;
 }
+
 .drop.pr:hover {
     box-shadow: 0 0 5px 2.5px rgb(49, 49, 182);
 }
+
 .name {
     font-size: 20px;
 }
+
 .control-panel {
     text-align: center;
     justify-content: center;
 }
+
 .control-panel .controller {
-    width: 80px;
-    height: 30px;
+    width: 160px;
+    height: 60px;
     margin-top: 20px;
     border-radius: 5px;
     background-color: white;
     border: 1px solid lightgrey;
     color: #0c1e39;
     font-size: 16px;
-    margin: 5px;
     cursor: pointer;
 }

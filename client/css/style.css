@@ -59,6 +59,12 @@ input[type="submit"] {
     padding: 50px;
 }
 
+.container.bigger {
+    width: 900px;
+    height: 900px;
+    padding: 25px;
+}
+
 .container.supper-huge {
     width: 90%;
     height: 90%;
