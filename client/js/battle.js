@@ -128,7 +128,7 @@ const render = state => {
 
                     const pr = +element.querySelector('.pr').innerText
 
-                    if (pr > currentSelfStones) {
+                    if (pr > currentSelfStones || selfBoardArray.length === 4) {
                         return
                     }
                     
@@ -152,9 +152,7 @@ const render = state => {
                     </div>`
                 
                     selfHand.removeChild(element)
-                    console.log(selfHandArray)
                     selfHandArray = selfHandArray.filter(handCard => handCard[0] !== card[0])
-                    console.log(selfHandArray)
                     selfBoardArray.push(card)
 
                     socket.send(
@@ -256,7 +254,7 @@ socket.onmessage = event => {
                     selfStones++
                 }
 
-                if (data.card) {
+                if (data.card && selfHandArray.length < 6) {
                     selfHandArray.push(data.card)
                 }
 
