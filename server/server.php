@@ -82,7 +82,6 @@ $server->handler = function($connect, $data, $server) {
                     $card_1 = array_shift($deck);
                     $card_2 = array_shift($deck);
                     $card_3 = array_shift($deck);
-                    $card_4 = array_shift($deck);
 
                     $turn_first = is_array($lobby[0]);
 
@@ -92,8 +91,7 @@ $server->handler = function($connect, $data, $server) {
                         "hand" => [
                             $card_1,
                             $card_2,
-                            $card_3,
-                            $card_4
+                            $card_3
                         ],
                         "deck" => $deck,
                         "coin" => $turn_first
@@ -132,8 +130,6 @@ $server->handler = function($connect, $data, $server) {
                         $card = array_shift($deck);
                         array_push($users["hand"], $card);
                         $users["deck"] = $deck;
-
-                        echo "CARDS LEFT: " . sizeof($deck) . PHP_EOL;
 
                         $response_1 = [
                             "type" => "draw",

@@ -56,12 +56,6 @@
     margin: 5px 0;
 }
 
-.info.enemy {
-}
-
-.info.self {
-}
-
 .board {
     height: 55%;
     justify-content: space-evenly;    
@@ -278,8 +272,8 @@
 }
 
 .active {
-    border: 5px solid royalblue;
-    border-radius: 65%;
+    box-shadow: 0 0 7.5px 5px royalblue;
+    border-radius: 50%;
 }
 
 .message-box {

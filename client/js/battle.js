@@ -98,6 +98,7 @@ const showResults = (winner, status) => {
     messageBox.style.display = 'flex'
 
     clearInterval(ropeTimer)
+    socket.close()
 }
 
 enemyHero.addEventListener('click', () => {
@@ -500,8 +501,4 @@ socket.onopen = () => {
             user: getCookie('login')
         })
     )
-}
-
-socket.onclose = () => {
-    location.replace('/')
 }
