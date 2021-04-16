@@ -1,6 +1,6 @@
 import { getCookie } from './cookies.js'
 
-const socket = new WebSocket('ws://10.11.7.10:8080');
+const socket = new WebSocket('ws://127.0.0.1:8080');
 
 if (!getCookie('enemy')) {
     location.replace('/')
@@ -38,6 +38,7 @@ let currentSelfStones = selfStones
 let currentEnemyStones = enemyStones
 
 let is_turn = false
+let is_end = false
 
 let activeCard = null
 
@@ -92,13 +93,18 @@ const showResults = (winner, status) => {
     const messageBox = document.querySelector('.message-box')
     messageBox.querySelector('.container.small').innerHTML =
     `${winner} ${status}!
-    <input type="button" class="controller" value="Home" onclick="location.replace('/')">
+    <input type="button" class="controller" value="Home">
     `
+
+    is_end = true
+
+    document.querySelector('.controller').addEventListener('click', () => {
+        location.replace('/')
+    })
 
     messageBox.style.display = 'flex'
 
     clearInterval(ropeTimer)
-    socket.close()
 }
 
 enemyHero.addEventListener('click', () => {
@@ -119,10 +125,6 @@ enemyHero.addEventListener('click', () => {
     const damage = +activeCard.querySelector('.at').innerText
 
     enemyHP -= damage
-
-    if (enemyHP <= 0) {
-        return showResults(getCookie('login'), "win")
-    }
 
     render('enemy_hero')
 
@@ -233,7 +235,7 @@ const render = state => {
             selfBoardArray.forEach(card => {
                 selfBoard.innerHTML +=
                 `<div class="card self" data-self="${card[0]}">
-                    <img src="/images/cards/${card[0]}.jpg">
+                    <img src="/images/cards/${card[0].toLowerCase()}.jpg">
                     <span class="drop at">
                         <span class="attack">${card[1]}</span>
                     </span>
@@ -278,7 +280,7 @@ const render = state => {
             enemyBoardArray.forEach(card => {
                 enemyBoard.innerHTML +=
                 `<div class="card enemy" data-enemy="${card[0]}">
-                    <img src="/images/cards/${card[0]}.jpg">
+                    <img src="/images/cards/${card[0].toLowerCase()}.jpg">
                     <span class="drop at">
                         <span class="attack">${card[1]}</span>
                     </span>
@@ -358,6 +360,10 @@ const render = state => {
                 </span>
             </span>`
 
+            if (enemyHP <= 0) {
+                return showResults(getCookie('login'), "win")
+            }
+
             break
         case 'self_hero':
             selfHero.innerHTML =
@@ -367,6 +373,10 @@ const render = state => {
                     ${selfHP}
                 </span>
             </span>`
+
+            if (selfHP <= 0) {
+                return showResults(getCookie('enemy'), "win")
+            }
 
             break
     }
@@ -471,22 +481,11 @@ socket.onmessage = event => {
         case 'attack_face':
             selfHP -= data.damage
 
-            if (selfHP <= 0) {
-                return showResults(getCookie('enemy'), 'win')
-            }
-
             render('self_hero')
 
             break
         case 'end':
-            const status = data.status
-            let winner = getCookie("login")
-
-            if (status !== "win") {
-                winner = getCookie("enemy")
-            }
-
-            showResults(winner, status)
+            location.replace('/')
 
             break
     }

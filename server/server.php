@@ -5,7 +5,7 @@ ob_implicit_flush();
 
 require_once 'WebSocket.php';
 
-$server = new WebSocket('10.11.7.10');
+$server = new WebSocket();
 
 $server->settings(true);
 
@@ -77,7 +77,7 @@ $server->handler = function($connect, $data, $server) {
 
             foreach ($server->lobbies as &$lobby) {
                 if (in_array($user, $lobby)) {
-                    $user = array_shift($lobby);
+                    $user_login = array_shift($lobby);
 
                     $card_1 = array_shift($deck);
                     $card_2 = array_shift($deck);
@@ -86,7 +86,7 @@ $server->handler = function($connect, $data, $server) {
                     $turn_first = is_array($lobby[0]);
 
                     array_push($lobby, [
-                        "login" => $user,
+                        "login" => $user_login,
                         "board" => [],
                         "hand" => [
                             $card_1,
@@ -254,8 +254,6 @@ $server->handler = function($connect, $data, $server) {
 
                         $self_board = $json["self_board"];
                         $enemy_board = $json["enemy_board"];
-
-                        array_push($users["board"], $playedCard);
 
                         $users["board"] = $self_board;
                         $lobby[$enemyKey]["board"] = $enemy_board;
